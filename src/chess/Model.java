@@ -1,4 +1,4 @@
-package v1;
+package chess;
 
 import java.util.ArrayList;
 import java.util.Observable;

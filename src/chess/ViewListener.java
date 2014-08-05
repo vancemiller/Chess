@@ -1,4 +1,4 @@
-package v1;
+package chess;
 
 public interface ViewListener {
 	void handleChessViewEvent(ViewEvent e);

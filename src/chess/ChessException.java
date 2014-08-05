@@ -1,4 +1,4 @@
-package v1;
+package chess;
 
 public abstract class ChessException extends Exception {
 	/**

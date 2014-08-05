@@ -1,4 +1,4 @@
-package v1;
+package chess;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -16,8 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -39,14 +38,14 @@ import javax.swing.event.HyperlinkListener;
 @SuppressWarnings("serial")
 public class View extends JPanel implements MouseListener, Observer {
 
-	private ArrayList<ViewListener> viewListeners = new ArrayList<ViewListener>();
+	private final ArrayList<ViewListener> viewListeners = new ArrayList<ViewListener>();
 	private GameInfoPanel infoPanel;
 	private JPanel mainPanel;
 	private GameBoardWidget boardPanel;
 	private PlayerLabelWidget playerOne;
 	private PlayerLabelWidget playerTwo;
 
-	private Model model;
+	private final Model model;
 
 	public View(Model model) {
 		this.model = model;
@@ -167,9 +166,9 @@ class GameBoardWidget extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 4008239470376384410L;
-	private GameSquareWidget[][] squares = new GameSquareWidget[8][8];
-	private GridBagLayout gridbag = new GridBagLayout();
-	private GridBagConstraints c = new GridBagConstraints();
+	private final GameSquareWidget[][] squares = new GameSquareWidget[8][8];
+	private final GridBagLayout gridbag = new GridBagLayout();
+	private final GridBagConstraints c = new GridBagConstraints();
 
 	public GameBoardWidget(MouseListener l) {
 		this.setLayout(gridbag);
@@ -286,9 +285,9 @@ class CapturedPiecesWidget extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 2882742724478041909L;
-	private GameSquareWidget[][] squares = new GameSquareWidget[4][8];
-	private GridBagLayout gridbag = new GridBagLayout();
-	private GridBagConstraints c = new GridBagConstraints();
+	private final GameSquareWidget[][] squares = new GameSquareWidget[4][8];
+	private final GridBagLayout gridbag = new GridBagLayout();
+	private final GridBagConstraints c = new GridBagConstraints();
 
 	public CapturedPiecesWidget() {
 		this.setLayout(gridbag);
@@ -346,7 +345,7 @@ class GameSquareWidget extends JButton {
 	 * 
 	 */
 	private static final long serialVersionUID = -4814385078710542011L;
-	private ChessPosition location;
+	private final ChessPosition location;
 
 	public GameSquareWidget(ChessPosition location) {
 		this.location = location;
@@ -374,9 +373,9 @@ class PlayerLabelWidget extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -6970905918322197153L;
-	private GridBagLayout gridbag = new GridBagLayout();
-	private GridBagConstraints c = new GridBagConstraints();
-	private JLabel playerLabel;
+	private final GridBagLayout gridbag = new GridBagLayout();
+	private final GridBagConstraints c = new GridBagConstraints();
+	private final JLabel playerLabel;
 
 	public PlayerLabelWidget(ChessPlayer player) {
 		playerLabel = new JLabel();
@@ -402,8 +401,8 @@ class GameInfoPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 8939647084387470879L;
-	private GridBagLayout gridbag = new GridBagLayout();
-	private GridBagConstraints c = new GridBagConstraints();
+	private final GridBagLayout gridbag = new GridBagLayout();
+	private final GridBagConstraints c = new GridBagConstraints();
 	private ChessClockWidget chessClock;
 	private JLabel playerTurn;
 	private JTextField inputField;
@@ -413,7 +412,7 @@ class GameInfoPanel extends JPanel {
 	private JButton nameButton;
 	private JButton helpButton;
 	private CapturedPiecesWidget captures;
-	private View view;
+	private final View view;
 
 	public GameInfoPanel(Model game, View view) {
 		this.view = view;
@@ -515,7 +514,7 @@ class ChessClockWidget extends JPanel {
 	 */
 	private static final long serialVersionUID = 2910956338423285089L;
 	private double elapsed;
-	private JLabel clock;
+	private final JLabel clock;
 	private ChessTimer timer;
 
 	public ChessClockWidget() {
@@ -546,7 +545,7 @@ class ChessClockWidget extends JPanel {
 
 class ChessTimer extends Thread {
 	private boolean done;
-	private ChessClockWidget clock;
+	private final ChessClockWidget clock;
 
 	public ChessTimer(ChessClockWidget clock) {
 		this.clock = clock;
@@ -557,6 +556,7 @@ class ChessTimer extends Thread {
 		done = true;
 	}
 
+	@Override
 	public void run() {
 		long start = System.currentTimeMillis();
 		while (!done) {
@@ -565,9 +565,10 @@ class ChessTimer extends Thread {
 			} catch (InterruptedException e) {
 			}
 			long end = System.currentTimeMillis();
-			final double delta = ((double) (end - start) / 1000.0);
+			final double delta = ((end - start) / 1000.0);
 
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					clock.updateElapsed(delta);
 				}
@@ -575,8 +576,9 @@ class ChessTimer extends Thread {
 			start = end;
 		}
 		long end = System.currentTimeMillis();
-		final double change = ((double) (end - start) / 1000.0);
+		final double change = ((end - start) / 1000.0);
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				clock.updateElapsed(change);
 			}
@@ -590,7 +592,7 @@ class MoveInput extends JTextField implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 2504643074954351218L;
-	private View view;
+	private final View view;
 
 	public MoveInput(View view) {
 		super("Type a command");
@@ -625,7 +627,7 @@ class UndoButton extends JButton implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -923958918462053114L;
-	private View view;
+	private final View view;
 
 	public UndoButton(View view) {
 		this.view = view;
@@ -644,7 +646,7 @@ class ChangeNamesButton extends JButton implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -911467316404062410L;
-	private View view;
+	private final View view;
 
 	public ChangeNamesButton(View view) {
 		this.view = view;
@@ -663,7 +665,7 @@ class LogButton extends JButton implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -7157270291503966602L;
-	private View view;
+	private final View view;
 
 	public LogButton(View view) {
 		this.view = view;
@@ -682,7 +684,7 @@ class HighlightButton extends JButton implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 514205102171291926L;
-	private View view;
+	private final View view;
 	private boolean enabled;
 
 	public HighlightButton(View view) {
@@ -692,6 +694,7 @@ class HighlightButton extends JButton implements ActionListener {
 		this.addActionListener(this);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (!enabled) {
 			view.notifyViewListeners(new HighlightEvent(true));
@@ -710,7 +713,7 @@ class HelpButton extends JButton implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 4307690287397664315L;
-	private View view;
+	private final View view;
 
 	public HelpButton(View view) {
 		this.view = view;
@@ -759,25 +762,19 @@ class ChessHelpWindow extends JFrame implements HyperlinkListener {
 		JScrollPane scrollPane = new JScrollPane(helpPanel,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
 		try {
 			// Use a JEditorPane because they can hold html files
-			final String resourcePath = "ChessHelpSource.html";
-			URL resourceURL = Thread.currentThread().getContextClassLoader()
-					.getResource(resourcePath);
-			textPane = new JEditorPane(resourceURL);
+			textPane = new JEditorPane(Paths.get("src\\ChessHelpSource.html")
+					.toUri().toURL());
 
 			textPane.setEditable(false);
 			textPane.addHyperlinkListener(this);
 			helpPanel.add(textPane);
-		} catch (MalformedURLException e) {
-			helpPanel.add(new JLabel("ChessHelpSource.html file is missing."));
-			helpPanel.add(new JLabel(
-					"File should be located in src/v1/ directory."));
 		} catch (IOException e) {
+			e.printStackTrace();
 			helpPanel.add(new JLabel("ChessHelpSource.html file is missing."));
-			helpPanel.add(new JLabel(
-					"File should be located in src/v1/ directory."));
+			helpPanel
+					.add(new JLabel("File should be located in src directory."));
 		}
 
 		this.add(scrollPane);
@@ -854,7 +851,7 @@ class ChangeNameDialog extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = -3439654734533824249L;
-	private View view;
+	private final View view;
 	private JTextField player1;
 	private JTextField player2;
 
