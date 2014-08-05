@@ -764,7 +764,7 @@ class ChessHelpWindow extends JFrame implements HyperlinkListener {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		try {
 			// Use a JEditorPane because they can hold html files
-			textPane = new JEditorPane(Paths.get("src\\ChessHelpSource.html")
+			textPane = new JEditorPane(Paths.get("src/ChessHelpSource.html")
 					.toUri().toURL());
 
 			textPane.setEditable(false);
